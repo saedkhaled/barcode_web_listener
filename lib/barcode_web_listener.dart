@@ -15,7 +15,7 @@ typedef BarcodeScannedCallback = void Function(String barcode);
 /// Keep in mind this widget will listen for events even when not visible.
 /// Windows seems to be using the [KeyDownEvent] instead of the
 /// [KeyUpEvent], this behaviour can be managed by setting [useKeyDownEvent].
-class BarcodeKeyboardWebListener extends StatefulWidget {
+class BarcodeWebListener extends StatefulWidget {
   /// Child widget to be displayed.
   final Widget child;
 
@@ -36,7 +36,7 @@ class BarcodeKeyboardWebListener extends StatefulWidget {
   /// It will buffer all characters coming in specified `bufferDuration` time frame
   /// that end with line feed character and call callback function with result.
   /// Keep in mind this widget will listen for events even when not visible.
-  const BarcodeKeyboardWebListener({
+  const BarcodeWebListener({
     /// Child widget to be displayed.
     required this.child,
 
@@ -55,12 +55,12 @@ class BarcodeKeyboardWebListener extends StatefulWidget {
   });
 
   @override
-  State<BarcodeKeyboardWebListener> createState() =>
-      _BarcodeKeyboardWebListenerState();
+  State<BarcodeWebListener> createState() =>
+      _BarcodeWebListenerState();
 }
 
-class _BarcodeKeyboardWebListenerState
-    extends State<BarcodeKeyboardWebListener> {
+class _BarcodeWebListenerState
+    extends State<BarcodeWebListener> {
   List<String> _scannedChars = [];
   late StreamSubscription<String?> _keyboardSubscription;
 
