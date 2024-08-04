@@ -94,10 +94,7 @@ class _BarcodeWebListenerState
   }
 
   void submitScannedCharCode() {
-    // last char is being added as 'm' instead of line feed, so we need to check for 'm' if it is the last char
-    // and call the callback and remove the last char which is 'm'
-    if (_scannedChars.isNotEmpty && _scannedChars.last == 'm') {
-      _scannedChars.removeLast();
+    if (_scannedChars.isNotEmpty ) {
       widget.onBarcodeScanned.call(_scannedChars.join());
       resetScannedCharCodes();
     }
