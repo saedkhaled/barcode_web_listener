@@ -27,7 +27,7 @@ class BarcodeWebListener extends StatefulWidget {
   /// previous keys will be ignored.
   final Duration bufferDuration;
 
-  /// When experiencing issueswith empty barcodes on Windows,
+  /// When experiencing issues with empty barcodes on Windows,
   /// set this value to true. Default value is `false`.
   final bool useKeyDownEvent;
 
@@ -68,6 +68,8 @@ class _BarcodeWebListenerState
 
   Timer? _lastScannedCharCodeTimer;
 
+  DateTime? _lastScannedTime;
+
   @override
   void initState() {
     HardwareKeyboard.instance.addHandler(_keyBoardCallback);
@@ -81,6 +83,13 @@ class _BarcodeWebListenerState
     if (_lastScannedCharCodeTimer != null) {
       _lastScannedCharCodeTimer!.cancel();
     }
+    final newTime = DateTime.now();
+    if (_lastScannedTime != null) {
+      final diff = newTime.difference(_lastScannedTime!);
+      if (diff.inMilliseconds > widget.bufferDuration.inMilliseconds) {
+        resetScannedCharCodes();
+      }
+    }
     _lastScannedCharCodeTimer =
         Timer(widget.bufferDuration, submitScannedCharCode);
   }
@@ -89,12 +98,8 @@ class _BarcodeWebListenerState
     _scannedChars = [];
   }
 
-  void addScannedCharCode(String charCode) {
-    _scannedChars.add(charCode);
-  }
-
   void submitScannedCharCode() {
-    if (_scannedChars.isNotEmpty ) {
+    if (_scannedChars.length > 3) {
       widget.onBarcodeScanned.call(_scannedChars.join());
       resetScannedCharCodes();
     }
